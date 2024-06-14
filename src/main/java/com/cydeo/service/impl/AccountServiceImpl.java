@@ -21,10 +21,11 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account createNewAccount(BigDecimal balance, Date creationDate, AccountType accountType, Long userId) {
         //we need to create account object
-        //save into the database(repository)
+        //then save into the database(repository)
         //return the object created
         //What is the point of UUID ?
         //one user can have multiple accounts
+        //builder is like a all args constructor.
         Account account = Account.builder().id(UUID.randomUUID()).userId(userId)
                 .balance(balance).accountType(accountType).creationDate(creationDate).build();
 
