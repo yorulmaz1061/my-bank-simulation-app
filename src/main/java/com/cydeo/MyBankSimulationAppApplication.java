@@ -18,7 +18,9 @@ import java.util.Date;
 public class MyBankSimulationAppApplication {
 
     public static void main(String[] args) {
-        //since we haven't added MVC architecture yet we create bean as below;
+        SpringApplication.run(MyBankSimulationAppApplication.class, args);
+
+       /* //since we haven't added MVC architecture yet we create bean as below;
         ApplicationContext container = SpringApplication.run(MyBankSimulationAppApplication.class, args);
 
         //get account service and transaction service beans
@@ -35,7 +37,7 @@ public class MyBankSimulationAppApplication {
         transactionService.makeTransfer(sender,receiver, new BigDecimal(28),new Date(),"money from dad");
         transactionService.findAllTransaction().forEach(System.out::println);
         accountService.listAllAccount().forEach(System.out::println);
-
+*/
     }
 
 }
