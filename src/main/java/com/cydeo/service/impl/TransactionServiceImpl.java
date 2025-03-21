@@ -4,11 +4,13 @@ import com.cydeo.enums.AccountType;
 import com.cydeo.exception.AccountOwnershipException;
 import com.cydeo.exception.BadRequestException;
 import com.cydeo.exception.BalanceNotSufficentException;
+import com.cydeo.exception.UnderConstructionException;
 import com.cydeo.model.Account;
 import com.cydeo.model.Transaction;
 import com.cydeo.repository.AccountRepository;
 import com.cydeo.repository.TransactionRepository;
 import com.cydeo.service.TransactionService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -18,9 +20,12 @@ import java.util.UUID;
 
 @Component
 public class TransactionServiceImpl implements TransactionService {
+    @Value("${under_construction}")
+    private boolean underConstruction;
     //if you put private final it forces you to create constructor to initialize
     private final AccountRepository accountRepository;
     private final TransactionRepository transactionRepository;
+
 
     public TransactionServiceImpl(AccountRepository accountRepository, TransactionRepository transactionRepository) {
         this.accountRepository = accountRepository;
@@ -30,6 +35,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public Transaction makeTransfer(Account sender, Account receiver, BigDecimal amount, Date creationDate, String message) {
+        if (!underConstruction) {
        /*
        Questions:
        -if sender or receiver is null?
@@ -37,19 +43,22 @@ public class TransactionServiceImpl implements TransactionService {
        -if sender has enough balance to make transfer?
        -if both accounts are checking, if not, one of them is saving, it needs to be same userId
         */
-        // we will write a small helper method to validate above
-        // conditions inside the method enabled account validation. Those barriers are if statement.
-        // Conditions should be passed before transaction phase.
+            // we will write a small helper method to validate above
+            // conditions inside the method enabled account validation. Those barriers are if statement.
+            // Conditions should be passed before transaction phase.
 
-        validateAccount(sender, receiver);
-        checkAccountOwnership(sender, receiver);
-        executeBalanceAndUpdateIfRequired(amount, sender, receiver);
-        //make transfer
-        //after all validations are completed and money is transferred we need to create Transaction object and save/return it.
-        Transaction transaction = Transaction.builder().amount(amount).sender(sender.getId()).receiver(receiver.getId())
-                .createDate(creationDate).message(message).build();
-        // save into dB and return it.
-         return transactionRepository.save(transaction);
+            validateAccount(sender, receiver);
+            checkAccountOwnership(sender, receiver);
+            executeBalanceAndUpdateIfRequired(amount, sender, receiver);
+            //make transfer
+            //after all validations are completed and money is transferred we need to create Transaction object and save/return it.
+            Transaction transaction = Transaction.builder().amount(amount).sender(sender.getId()).receiver(receiver.getId())
+                    .createDate(creationDate).message(message).build();
+            // save into dB and return it.
+            return transactionRepository.save(transaction);
+        } else {
+            throw new UnderConstructionException("App is under construction. Please try again later");
+        }
     }
 
     private void executeBalanceAndUpdateIfRequired(BigDecimal amount, Account sender, Account receiver) {
@@ -112,6 +121,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public List<Transaction> findAllTransaction() {
-        return null;
+        return transactionRepository.findAllTransaction();
+
     }
 }
