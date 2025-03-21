@@ -18,6 +18,7 @@ import java.util.UUID;
 
 @Component
 public class TransactionServiceImpl implements TransactionService {
+    //if you put private final it forces you to create constructor to initialize
     private final AccountRepository accountRepository;
     private final TransactionRepository transactionRepository;
 
@@ -38,6 +39,7 @@ public class TransactionServiceImpl implements TransactionService {
         */
         // we will write a small helper method to validate above
         // conditions inside the method enabled account validation. Those barriers are if statement.
+        // Conditions should be passed before transaction phase.
 
         validateAccount(sender, receiver);
         checkAccountOwnership(sender, receiver);
@@ -52,7 +54,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     private void executeBalanceAndUpdateIfRequired(BigDecimal amount, Account sender, Account receiver) {
         if (checkSenderBalance(sender, amount)) {
-            //update sender and receiver amount
+            // if above is true then update sender and receiver amount
             sender.setBalance(sender.getBalance().subtract(amount));
             receiver.setBalance(receiver.getBalance().add(amount));
 
@@ -64,6 +66,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     private boolean checkSenderBalance(Account sender, BigDecimal amount) {
         //verify sender has enough balance to send
+        //When subtraction happen leftover must be zero or bigger.
         return sender.getBalance().subtract(amount).compareTo(BigDecimal.ZERO) >= 0;
 
     }
@@ -74,6 +77,7 @@ public class TransactionServiceImpl implements TransactionService {
         and user of sender or receiver is not the same, throw AccountOwnershipException
         If((isSenderOrReceiverAccount)&&(userIdMustBeDifferent) then throw exception
          */
+        // be careful UserId is not bank accountId. It is like unique name
         if ((sender.getAccountType().equals(AccountType.SAVING) || receiver.getAccountType().equals(AccountType.SAVING))
                 && !sender.getUserId().equals(receiver.getUserId())) {
             throw new AccountOwnershipException("If one of the account is saving, user must be the same for sender and receiver");
@@ -86,16 +90,16 @@ public class TransactionServiceImpl implements TransactionService {
         -if account ids are the same (same account)
         -if the account exist in dB (repository)
          */
-        //if conditions is wrong throw the exception.
-        //backend part must be its own validation dedicated from ui
+        //if conditions is wrong throw the exception. Backend part must be its own validation dedicated from ui
         if (sender == null || receiver == null) {
+            // it is custom exception (to be) created in exception package
             throw new BadRequestException("Sender or Receiver cannot be null");
         }
         //if sender and receiver accounts are the same throw BadRequestException
         if (sender.getId().equals(receiver.getId())) {
             throw new BadRequestException("Sender and Receiver cannot be the same");
         }
-        //check if account exist in dB
+        //check if accounts of sender and receiver exist in dB
         findAccountById(sender.getId());
         findAccountById(receiver.getId());
 

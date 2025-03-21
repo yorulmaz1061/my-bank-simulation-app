@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class AccountRepository {
+    //It will act like a dB for now.
     public static List<Account> accountList = new ArrayList<>();
 
     public Account save(Account account) {
