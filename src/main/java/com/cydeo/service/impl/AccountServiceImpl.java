@@ -1,5 +1,6 @@
 package com.cydeo.service.impl;
 
+import com.cydeo.enums.AccountStatus;
 import com.cydeo.enums.AccountType;
 import com.cydeo.model.Account;
 import com.cydeo.repository.AccountRepository;
@@ -25,10 +26,12 @@ public class AccountServiceImpl implements AccountService {
         //What is the point of UUID? randomUUID() is a method in UUID class. One user can have multiple accounts
         //it is auto generated in constructor.builder() is like a all args constructor.
         //If the object is used for the carrying data from UI-API-Backend, we manage it by creating AllArgConstructor
-        // Thats why we don't add @Component into POJO Account
+        // That's why we don't add @Component into POJO Account
         Account account = Account.builder().id(UUID.randomUUID()).userId(userId)
-                .balance(balance).accountType(accountType).creationDate(creationDate).build();
+                .balance(balance).accountType(accountType)
+                .creationDate(creationDate).accountStatus(AccountStatus.ACTIVE).build();
         //save into dB (repository) and return the object
+
 
         return accountRepository.save(account);
     }
