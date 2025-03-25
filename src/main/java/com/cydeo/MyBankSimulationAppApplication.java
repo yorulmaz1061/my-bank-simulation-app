@@ -18,7 +18,7 @@ import java.util.Date;
 public class MyBankSimulationAppApplication {
 
     public static void main(String[] args) {
-      //  SpringApplication.run(MyBankSimulationAppApplication.class, args);
+      // SpringApplication.run(MyBankSimulationAppApplication.class, args);
 
         //since we haven't added MVC architecture yet we create bean as below;
         ApplicationContext container = SpringApplication.run(MyBankSimulationAppApplication.class, args);
@@ -31,7 +31,6 @@ public class MyBankSimulationAppApplication {
         Account sender = accountService.createNewAccount(BigDecimal.valueOf(70), new Date(), AccountType.CHECKING, 1L);
         Account receiver = accountService.createNewAccount(BigDecimal.valueOf(50), new Date(), AccountType.CHECKING, 2L);
         Account sender2 = accountService.createNewAccount(BigDecimal.valueOf(150), new Date(), AccountType.CHECKING, 3L);
-
         // Account receiver2 = null;
 
        /* accountService.listAllAccount().forEach(System.out::println);

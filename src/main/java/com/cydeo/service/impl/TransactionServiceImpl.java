@@ -124,4 +124,8 @@ public class TransactionServiceImpl implements TransactionService {
         return transactionRepository.findAllTransaction();
 
     }
+    public List<Transaction>last10Transactions(){
+        return transactionRepository.findLast10Transactions();
+
+    }
 }

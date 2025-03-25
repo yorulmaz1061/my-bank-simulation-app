@@ -36,8 +36,8 @@
                                         <option th:value="''" th:text="select"></option>
                                         <option th:each="account : ${accounts}" th:value="${account.id}"
                                                 th:text="${account.balance}+'-'+${account.userId}+'-'+${account.accountType.name()}"></option>
-
                                     </select>
+
                                     <span th:if="${#fields.hasErrors('receiver')}">
                                         <ul class="alert alert-danger">
                                             <li th:each="err :${#fields.errors('receiver')}" th:text="${err}"></li>
