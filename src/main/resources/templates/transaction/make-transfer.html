@@ -84,12 +84,12 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr th:each="lTransaction : ${lastTransactions}">
-                                    <td th:text="${lTransaction.getSender()}"></td>
-                                    <td th:text="${lTransaction.getReceiver()}"></td>
-                                    <td th:text="${lTransaction.getAmount()}"></td>
-                                    <td th:text="${lTransaction.getCreateDate()}"></td>
-                                    <td th:text="${lTransaction.getMessage()}"></td>
+                                <tr th:each="lTrans : ${transactionLists}">
+                                    <td th:text="${lTrans.getSender()}"></td>
+                                    <td th:text="${lTrans.getReceiver()}"></td>
+                                    <td th:text="${lTrans.getAmount()}"></td>
+                                    <td th:text="${lTrans.getCreateDate()}"></td>
+                                    <td th:text="${lTrans.getMessage()}"></td>
                                 </tr>
                             </tbody>
                         </table>
