@@ -5,6 +5,8 @@ import com.cydeo.enums.AccountType;
 import lombok.Builder;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.UUID;
@@ -14,9 +16,13 @@ public class Account {
     //UUID gives  16 digit random id. to give unique fields.
     //When dB connection made it will be changed
     private UUID id;
+    @NotNull
+    @Positive
     private BigDecimal balance;
+    @NotNull
     private AccountType accountType;
     private Date creationDate;
+    @NotNull
     private Long userId;
     private AccountStatus accountStatus;
 
