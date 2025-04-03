@@ -1,16 +1,17 @@
 package com.cydeo.repository;
 
-import com.cydeo.exception.RecordNotFoundException;
-import com.cydeo.dto.AccountDTO;
-import org.springframework.stereotype.Component;
+import com.cydeo.entity.Account;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 
-@Component
-public class AccountRepository {
-    //It will act like a dB for now.
+
+@Repository
+public interface AccountRepository extends JpaRepository<Account, Long> {
+
+
+  /*  //It will act like a dB for now.
     public static List<AccountDTO> accountDTOList = new ArrayList<>();
 
     public AccountDTO save(AccountDTO accountDTO) {
@@ -27,7 +28,7 @@ public class AccountRepository {
         return accountDTOList.stream().filter(account -> account.getId().equals(id))
                 .findAny().orElseThrow(() -> new RecordNotFoundException("Account does not exist in dB"));
     }
-
+*/
 
 }
 

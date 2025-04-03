@@ -1,16 +1,12 @@
 package com.cydeo.repository;
 
-import com.cydeo.dto.TransactionDTO;
-import org.springframework.stereotype.Component;
+import com.cydeo.entity.Transaction;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
-
-@Component
-public class TransactionRepository {
-    public static List<TransactionDTO> transactionDTOList = new ArrayList<>();
+@Repository
+public interface TransactionRepository extends JpaRepository<Transaction, Long> {
+/*    public static List<TransactionDTO> transactionDTOList = new ArrayList<>();
 
     public TransactionDTO save(TransactionDTO transactionDTO) {
         transactionDTOList.add(transactionDTO);
@@ -33,5 +29,5 @@ public class TransactionRepository {
                 .filter(x->x.getSender().equals(transactionId)||
                         x.getReceiver().equals(transactionId)).collect(Collectors.toList());
 
-    }
+    }*/
 }
