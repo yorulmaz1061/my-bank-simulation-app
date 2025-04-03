@@ -1,9 +1,8 @@
 package com.cydeo.contoller;
 
+import com.cydeo.dto.AccountDTO;
 import com.cydeo.enums.AccountType;
-import com.cydeo.model.Account;
 import com.cydeo.service.AccountService;
-import com.cydeo.service.TransactionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -32,7 +31,7 @@ public class AccountController {
     public String getCreateForm(Model model) {
         //we need to provide empty account object
         //builder acts like noArgCons
-        model.addAttribute("account", Account.builder().build());
+        model.addAttribute("account", new AccountDTO());
         //we need to provide accountType object for filling dropdown
         model.addAttribute("accountTypes", AccountType.values());
 
@@ -43,25 +42,25 @@ public class AccountController {
     //trigger createNewAccount method, create the account based on the user input.
     //once user created return back to the index page.
     @PostMapping ("/create")
-    public String createAccount(@Valid @ModelAttribute("account") Account account, BindingResult bindingResult,Model model ) {
+    public String createAccount(@Valid @ModelAttribute("account") AccountDTO accountDTO, BindingResult bindingResult, Model model ) {
         if (bindingResult.hasErrors()) {
             // we just loaded dropdowns no need to load other empty objects again
             model.addAttribute("accountTypes", AccountType.values());
             return "account/create-account";
         }
-        System.out.println(account);
-        accountService.createNewAccount(account.getBalance(),new Date(),account.getAccountType(),account.getUserId());
+        System.out.println(accountDTO);
+        accountService.createNewAccount(accountDTO.getBalance(),new Date(), accountDTO.getAccountType(), accountDTO.getUserId());
         return "redirect:/index";
 
     }
     @GetMapping("delete/{id}")
-    public String getDeleteAccount(@PathVariable("id") UUID id) {
+    public String getDeleteAccount(@PathVariable("id") Long id) {
         System.out.println(id);
         accountService.deleteById(id);
         return "redirect:/index";
     }
     @GetMapping("activate/{id}")
-    public String getActivateAccount(@PathVariable("id") UUID id) {
+    public String getActivateAccount(@PathVariable("id") Long id) {
         accountService.activateAccount(id);
         return "redirect:/index";
     }

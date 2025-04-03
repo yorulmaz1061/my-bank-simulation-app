@@ -1,8 +1,8 @@
 package com.cydeo.service.impl;
 
+import com.cydeo.dto.AccountDTO;
 import com.cydeo.enums.AccountStatus;
 import com.cydeo.enums.AccountType;
-import com.cydeo.model.Account;
 import com.cydeo.repository.AccountRepository;
 import com.cydeo.service.AccountService;
 import org.springframework.stereotype.Component;
@@ -21,42 +21,40 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account createNewAccount(BigDecimal balance, Date creationDate, AccountType accountType, Long userId) {
+    public AccountDTO createNewAccount(BigDecimal balance, Date creationDate, AccountType accountType, Long userId) {
         //we need to create account object then save into the database(repository) return the object created
         //What is the point of UUID? randomUUID() is a method in UUID class. One user can have multiple accounts
         //it is auto generated in constructor.builder() is like a all args constructor.
         //If the object is used for the carrying data from UI-API-Backend, we manage it by creating AllArgConstructor
         // That's why we don't add @Component into POJO Account
-        Account account = Account.builder().id(UUID.randomUUID()).userId(userId)
-                .balance(balance).accountType(accountType)
-                .creationDate(creationDate).accountStatus(AccountStatus.ACTIVE).build();
+        AccountDTO accountDTO = new AccountDTO();
         //save into dB (repository) and return the object
 
 
-        return accountRepository.save(account);
+        return accountRepository.save(accountDTO);
     }
 
     @Override
-    public List<Account> listAllAccount() {
+    public List<AccountDTO> listAllAccount() {
         return accountRepository.findAll();
     }
 
     @Override
-    public void deleteById(UUID id) {
+    public void deleteById(Long id) {
         //find the account belongs the id
         //set status to deleted
-        Account account = accountRepository.findById(id);
-        account.setAccountStatus(AccountStatus.DELETED);
+        AccountDTO accountDTO = accountRepository.findById(id);
+        accountDTO.setAccountStatus(AccountStatus.DELETED);
     }
 
     @Override
-    public void activateAccount(UUID id) {
-        Account account = accountRepository.findById(id);
-        account.setAccountStatus(AccountStatus.ACTIVE);
+    public void activateAccount(Long id) {
+        AccountDTO accountDTO = accountRepository.findById(id);
+        accountDTO.setAccountStatus(AccountStatus.ACTIVE);
     }
 
     @Override
-    public Account findById(UUID id) {
+    public AccountDTO findById(Long id) {
       return accountRepository.findById(id);
     }
 

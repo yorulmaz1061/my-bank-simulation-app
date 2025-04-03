@@ -1,13 +1,12 @@
 package com.cydeo;
 
+import com.cydeo.dto.AccountDTO;
 import com.cydeo.enums.AccountType;
-import com.cydeo.model.Account;
 import com.cydeo.service.AccountService;
 import com.cydeo.service.TransactionService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ConfigurableApplicationContext;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -18,9 +17,9 @@ import java.util.Date;
 public class MyBankSimulationAppApplication {
 
     public static void main(String[] args) {
-      // SpringApplication.run(MyBankSimulationAppApplication.class, args);
+       SpringApplication.run(MyBankSimulationAppApplication.class, args);
 
-        //since we haven't added MVC architecture yet we create bean as below;
+       /* //since we haven't added MVC architecture yet we create bean as below;
         ApplicationContext container = SpringApplication.run(MyBankSimulationAppApplication.class, args);
 
         //get account service and transaction service beans
@@ -28,11 +27,11 @@ public class MyBankSimulationAppApplication {
         TransactionService transactionService = container.getBean(TransactionService.class);
 
         //create 2 accounts sender and receiver
-        Account sender = accountService.createNewAccount(BigDecimal.valueOf(70), new Date(), AccountType.CHECKING, 1L);
-        Account receiver = accountService.createNewAccount(BigDecimal.valueOf(50), new Date(), AccountType.CHECKING, 2L);
-        Account sender2 = accountService.createNewAccount(BigDecimal.valueOf(150), new Date(), AccountType.CHECKING, 3L);
+        AccountDTO sender = accountService.createNewAccount(BigDecimal.valueOf(70), new Date(), AccountType.CHECKING, 1L);
+        AccountDTO receiver = accountService.createNewAccount(BigDecimal.valueOf(50), new Date(), AccountType.CHECKING, 2L);
+        AccountDTO sender2 = accountService.createNewAccount(BigDecimal.valueOf(150), new Date(), AccountType.CHECKING, 3L);
         // Account receiver2 = null;
-
+*/
        /* accountService.listAllAccount().forEach(System.out::println);
 
         transactionService.makeTransfer(sender,receiver, new BigDecimal(28),new Date(),"money from dad");

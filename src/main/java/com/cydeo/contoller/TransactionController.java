@@ -1,7 +1,7 @@
 package com.cydeo.contoller;
 
-import com.cydeo.model.Account;
-import com.cydeo.model.Transaction;
+import com.cydeo.dto.AccountDTO;
+import com.cydeo.dto.TransactionDTO;
 import com.cydeo.service.AccountService;
 import com.cydeo.service.TransactionService;
 import org.springframework.stereotype.Controller;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
 import java.util.Date;
-import java.util.UUID;
 
 @Controller
 public class TransactionController {
@@ -33,7 +32,7 @@ public class TransactionController {
         //we need to  provide empty transaction object, we will send it to receiver
         // we need to provide list of all accounts
         // we need list of last 10 transactions to fill the table(Business .logic is missing)
-        model.addAttribute("transaction", Transaction.builder().build());
+        model.addAttribute("transaction", new TransactionDTO());
         model.addAttribute("accounts" , accountService.listAllAccount());
         model.addAttribute("transactionLists", transactionService.last10Transactions());
 
@@ -42,7 +41,7 @@ public class TransactionController {
     //write a post method that takes transaction object from the UI
     // complete the transfer and return the same page.
     @PostMapping("/transfer")
-    public String postMakeTransfer(@Valid @ModelAttribute("transaction") Transaction transaction, BindingResult bindingResult,Model model) {
+    public String postMakeTransfer(@Valid @ModelAttribute("transaction") TransactionDTO transactionDTO, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("accounts" , accountService.listAllAccount());
             model.addAttribute("transactionLists", transactionService.last10Transactions());
@@ -52,14 +51,14 @@ public class TransactionController {
 
         //I have UUID of accounts.But I need to provide Account object.
         //I need to find Accounts based on ID that I have and use as a parameter to complete makeTransfer method.
-        Account sender = accountService.findById(transaction.getSender());
-        Account receiver = accountService.findById(transaction.getReceiver());
-        transactionService.makeTransfer(sender,receiver,transaction.getAmount(),new Date(),transaction.getMessage());
+        AccountDTO sender = accountService.findById(transactionDTO.getSender().getId());
+        AccountDTO receiver = accountService.findById(transactionDTO.getReceiver().getId());
+        transactionService.makeTransfer(sender,receiver, transactionDTO.getAmount(),new Date(), transactionDTO.getMessage());
 
         return "redirect:/make-transfer";
     }
     @GetMapping("/transaction/{id}")
-    public String getTransactions(@PathVariable("id") UUID id , Model model) {
+    public String getTransactions(@PathVariable("id") Long id , Model model) {
         System.out.println(id);
         //get the list of transactions based on id and return as a model attribute
         model.addAttribute("transactions", transactionService.findTransactionListById(id));
