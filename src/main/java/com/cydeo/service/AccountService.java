@@ -8,15 +8,16 @@ import java.util.Date;
 import java.util.List;
 
 public interface AccountService {
-    //Account Id will be auto generated, we will skip as a parameter
-    AccountDTO createNewAccount(BigDecimal balance, Date creationDate, AccountType accountType, Long userId);
+    void createNewAccount(AccountDTO accountDTO);
 
     List<AccountDTO> listAllAccount();
 
-    void deleteById(Long id);
+    void deleteAccount(Long id);
 
     void activateAccount(Long id);
 
-    AccountDTO findById(Long id);
+    AccountDTO retrieveById(Long id);
 
+    List<AccountDTO> listAllActiveAccount();
+    void updateAccount(AccountDTO accountDTO);
 }

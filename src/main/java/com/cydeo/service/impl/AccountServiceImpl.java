@@ -1,61 +1,83 @@
 package com.cydeo.service.impl;
 
 import com.cydeo.dto.AccountDTO;
+import com.cydeo.entity.Account;
 import com.cydeo.enums.AccountStatus;
-import com.cydeo.enums.AccountType;
+import com.cydeo.mapper.AccountMapper;
 import com.cydeo.repository.AccountRepository;
 import com.cydeo.service.AccountService;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Component
 public class AccountServiceImpl implements AccountService {
-    AccountRepository accountRepository;
 
-    public AccountServiceImpl(AccountRepository accountRepository) {
+    private final AccountRepository accountRepository;
+    private final AccountMapper accountMapper;
+
+    public AccountServiceImpl(AccountRepository accountRepository, AccountMapper accountMapper) {
         this.accountRepository = accountRepository;
+        this.accountMapper = accountMapper;
     }
 
     @Override
-    public AccountDTO createNewAccount(BigDecimal balance, Date creationDate, AccountType accountType, Long userId) {
-        //we need to create account object then save into the database(repository) return the object created
-        //What is the point of UUID? randomUUID() is a method in UUID class. One user can have multiple accounts
-        //it is auto generated in constructor.builder() is like a all args constructor.
-        //If the object is used for the carrying data from UI-API-Backend, we manage it by creating AllArgConstructor
-        // That's why we don't add @Component into POJO Account
-        AccountDTO accountDTO = new AccountDTO();
-        //save into dB (repository) and return the object
+    public void  createNewAccount(AccountDTO accountDTO) {
 
-
-        return accountRepository.save(accountDTO);
+        accountDTO.setCreationDate(new Date());
+        accountDTO.setAccountStatus(AccountStatus.ACTIVE);
+        //save into the database(repository)
+        accountRepository.save(accountMapper.convertToEntity(accountDTO));
     }
 
     @Override
     public List<AccountDTO> listAllAccount() {
-        return accountRepository.findAll();
+        //we are getting list of account but we need to return list of AccountDTO
+        List<Account> accountList = accountRepository.findAll();
+        //we are converting entity to dto list and return it
+        return accountList.stream().map(accountMapper::convertToDTO).collect(Collectors.toList());
     }
 
     @Override
-    public void deleteById(Long id) {
-        //find the account belongs the id
+    public void deleteAccount(Long id) {
+        //find the account object based on id
+        Account account = accountRepository.findById(id).get();
         //set status to deleted
-        AccountDTO accountDTO = accountRepository.findById(id);
-        accountDTO.setAccountStatus(AccountStatus.DELETED);
+        account.setAccountStatus(AccountStatus.DELETED);
+        //save the updated account object
+        accountRepository.save(account);
     }
 
     @Override
     public void activateAccount(Long id) {
-        AccountDTO accountDTO = accountRepository.findById(id);
-        accountDTO.setAccountStatus(AccountStatus.ACTIVE);
+        //find the account belongs the id
+        Account account = accountRepository.findById(id).get();
+        //set status to active
+        account.setAccountStatus(AccountStatus.ACTIVE);
+        //save the updated account object
+        accountRepository.save(account);
     }
 
     @Override
-    public AccountDTO findById(Long id) {
-      return accountRepository.findById(id);
+    public AccountDTO retrieveById(Long id) {
+        //find the account entity based on id, then convert it dto and return it
+        return accountMapper.convertToDTO(accountRepository.findById(id).get());
     }
 
+    @Override
+    public List<AccountDTO> listAllActiveAccount() {
+        //we need list of active account from repository
+        List<Account> accountList = accountRepository.findAllByAccountStatus(AccountStatus.ACTIVE);
+        //convert active accounts to accountDto and return it
+        return accountList.stream().map(accountMapper::convertToDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public void updateAccount(AccountDTO accountDTO) {
+        accountRepository.save(accountMapper.convertToEntity(accountDTO));
+    }
 }
+
+

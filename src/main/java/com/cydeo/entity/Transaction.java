@@ -1,30 +1,22 @@
 package com.cydeo.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
-@NoArgsConstructor
 @Getter
 @Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "transactions")
-public class Transaction extends BaseEntity {
-    private BigDecimal amount;
-
-    private String message;
-
-    @Column(columnDefinition = "TIMESTAMP")
-    private Date createDate;
+public class Transaction {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @ManyToOne
     private Account sender;
@@ -32,4 +24,11 @@ public class Transaction extends BaseEntity {
     @ManyToOne
     private Account receiver;
 
+    private BigDecimal amount;
+
+    private String message;
+
+    @Column(columnDefinition = "TIMESTAMP")
+    private Date createDate;
 }
+

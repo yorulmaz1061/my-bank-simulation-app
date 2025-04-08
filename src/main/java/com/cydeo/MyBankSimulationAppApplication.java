@@ -19,21 +19,17 @@ import java.util.Date;
 public class MyBankSimulationAppApplication {
 
     public static void main(String[] args) {
-       SpringApplication.run(MyBankSimulationAppApplication.class, args);
+       ApplicationContext container =  SpringApplication.run(MyBankSimulationAppApplication.class, args);
 
-       /* //since we haven't added MVC architecture yet we create bean as below;
-        ApplicationContext container = SpringApplication.run(MyBankSimulationAppApplication.class, args);
-
-        //get account service and transaction service beans
         AccountService accountService = container.getBean(AccountService.class);
         TransactionService transactionService = container.getBean(TransactionService.class);
 
         //create 2 accounts sender and receiver
-        AccountDTO sender = accountService.createNewAccount(BigDecimal.valueOf(70), new Date(), AccountType.CHECKING, 1L);
+       /* AccountDTO sender = accountService.createNewAccount(BigDecimal.valueOf(70), new Date(), AccountType.CHECKING, 1L);
         AccountDTO receiver = accountService.createNewAccount(BigDecimal.valueOf(50), new Date(), AccountType.CHECKING, 2L);
-        AccountDTO sender2 = accountService.createNewAccount(BigDecimal.valueOf(150), new Date(), AccountType.CHECKING, 3L);
+        AccountDTO sender2 = accountService.createNewAccount(BigDecimal.valueOf(150), new Date(), AccountType.CHECKING, 3L);*/
         // Account receiver2 = null;
-*/
+
        /* accountService.listAllAccount().forEach(System.out::println);
 
         transactionService.makeTransfer(sender,receiver, new BigDecimal(28),new Date(),"money from dad");

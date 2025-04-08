@@ -11,7 +11,9 @@ public interface TransactionService {
     TransactionDTO makeTransfer(AccountDTO sender, AccountDTO receiver, BigDecimal amount, Date creationDate, String message);
 
     List<TransactionDTO>last10Transactions();
+
     public List<TransactionDTO> findAllTransaction();
 
-    List<TransactionDTO> findTransactionListById(Long transactionId);
+    List<TransactionDTO> findTransactionListById(Long id);
+
 }
